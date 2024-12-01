@@ -2,8 +2,29 @@ package n3;
 
 public class PersonagemSingle extends Personagem {
 
+	private int chefesDerrotados;
+	
+	
 	public PersonagemSingle(String nome, String cla, int nivelPoder) {
 		super(nome, cla, nivelPoder);
+		this.chefesDerrotados = 0;
+	}
+	
+	public void enfrentarChefe() {
+		if (chefesDerrotados < 5) {
+			chefesDerrotados ++;
+			System.out.println("Voce derrotou um chefão. Total de chefões derrotados: " + chefesDerrotados);
+			if (chefesDerrotados == 5) {
+				System.out.println("Parabens, voce derrotou todos os chefões e zerou o jogo");
+				
+			}
+		} else {
+			System.out.println("O jogo ja foi zerado");
+		}
+	}
+	
+	public int getChefesDerrotados() {
+		return chefesDerrotados;
 	}
 
 	public String[] listaPersonagem() {
