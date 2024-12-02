@@ -70,26 +70,31 @@ public class Main {
 						int nivelPoder = scanner.nextInt();
 						scanner.nextLine();
 
+						Personagem personagem;
 						if (tipoJogo == 1) {
-							personagens.add(new PersonagemSingle(nome, cla, nivelPoder));
+							personagem = new PersonagemSingle(nome, cla, nivelPoder);
 						} else {
-							personagens.add(new PersonagemMulti(nome, cla, nivelPoder));
+							personagem = new PersonagemMulti(nome, cla, nivelPoder);
 						}
+
+						personagem.create();
+						personagens.add(personagem);
 						System.out.println("Personagem criado com sucesso!");
 						break;
 
-					case 2: // Listar personagens
+					case 2: // Lista os personagens
 						if (personagens.isEmpty()) {
 							System.out.println("Nenhum personagem criado.");
 						} else {
-							System.out.println("---- Personagens ----");
+							System.out.println("---- Lista de Personagens ----");
 							for (Personagem p : personagens) {
-								p.read(p.getNome());
+								System.out.printf("Nome: %s | Clã: %s | Nível de Poder: %d | Tipo: %s\n",
+										p.getNome(), p.cla, p.nivelPoder, p.tipoJogo);
 							}
 						}
-						break;
+						break;1
 
-					case 3: // Excluir personagem
+					case 3: // Exclui um personagem
 						System.out.print("Digite o nome do personagem que deseja excluir: ");
 						nome = scanner.nextLine();
 

@@ -34,20 +34,21 @@ public abstract class Personagem {
 		}
 	}
 
-	public void read(String nome) {
-		String sql = "SELECT * FROM personagem WHERE nome = ?";
-		try (PreparedStatement pst = connection.prepareStatement(sql)) {
-			pst.setString(1, nome);
-			ResultSet rst = pst.executeQuery();
-			if (rst.next()) {
-				System.out.printf("ID: %d Nome: %s Clã: %s Nível de Poder: %d Tipo: %s\n",
-						rst.getInt("id"), rst.getString("nome"), rst.getString("cla"),
-						rst.getInt("nivel_poder"), rst.getString("tipo_jogo"));
-			} else {
-				System.out.println("Personagem não encontrado.");
+	public void readAll() {
+		String sql = "SELECT * FROM personagem";
+		try (PreparedStatement pst = connection.prepareStatement(sql);
+			 ResultSet rst = pst.executeQuery()) {
+			System.out.println("---- Lista de Personagens ----");
+			while (rst.next()) {
+				System.out.printf("ID: %d | Nome: %s | Clã: %s | Nível de Poder: %d | Tipo: %s\n",
+						rst.getInt("id"),
+						rst.getString("nome"),
+						rst.getString("cla"),
+						rst.getInt("nivel_poder"),
+						rst.getString("tipo_jogo"));
 			}
 		} catch (SQLException ex) {
-			System.out.println("Erro ao consultar personagem: " + ex.getMessage());
+			System.out.println("Erro ao listar personagens: " + ex.getMessage());
 		}
 	}
 

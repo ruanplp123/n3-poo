@@ -43,6 +43,9 @@ public class PersonagemSingle extends Personagem {
 			int rowsAffected = pst.executeUpdate();
 
 			if (rowsAffected > 0) {
+				if(nivelPoder > 20) {
+					System.out.println("Ultimo boss enfrentado, você ganhou o jogo! Parabéns");
+				}
 				System.out.println("Número de monstros derrotados atualizado no banco com sucesso!");
 			} else {
 				System.out.println("Nenhum personagem encontrado para atualizar.");

@@ -31,6 +31,7 @@ public class PersonagemMulti extends Personagem {
 
 			if (rowsAffected > 0) {
 				System.out.println("Poder do personagem aumentado com sucesso!");
+				nivelPoder += 2;
 			} else {
 				System.out.println("Personagem não encontrado para aumentar o poder.");
 			}
