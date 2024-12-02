@@ -1,29 +1,25 @@
 package n3;
 
-public class PersonagemMulti extends Personagem {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
+public class PersonagemMulti extends Personagem {
 	public PersonagemMulti(String nome, String cla, int nivelPoder) {
 		super(nome, cla, nivelPoder);
+		this.tipoJogo = "Multiplayer";
 	}
 
-	public String [] ListaPersonagem() {
-		return new String[] {"Personagem1", "Personagem2"};
-		
-	}
-	
-	public void criaPersonagem (String nome, String cla) {
-		System.out.println("Personagem " + nome + " do clã " + cla + " criado com sucesso!");
-	}
-	
-	public void deletaPersonagem (String nome, String cla) {
-		System.out.println("Personagem " + nome + " do clã " + cla + " deletado com sucesso!");
-		
-	}
-	
-	public void aumentarPoder () {
-		int novoNivelPoder = getNivelPoder() + 2;
-		 setNivelPoder(novoNivelPoder);
-		 System.out.println("Nível de poder aumentado para: " + novoNivelPoder);
-		
+	@Override
+	public void create() {
+		super.create();
+		String sql = "INSERT INTO personagem_multi (personagem_id) SELECT id FROM personagem WHERE nome = ?";
+		try (PreparedStatement pst = connection.prepareStatement(sql)) {
+			pst.setString(1, nome);
+			pst.executeUpdate();
+			System.out.println("Configuração de personagem multiplayer salva com sucesso!");
+		} catch (SQLException ex) {
+			System.out.println("Erro ao configurar personagem multiplayer: " + ex.getMessage());
+		}
 	}
 }

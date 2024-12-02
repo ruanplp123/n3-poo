@@ -1,51 +1,55 @@
 package n3;
 
-public class PersonagemSingle extends Personagem {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
+public class PersonagemSingle extends Personagem {
 	private int chefesDerrotados;
-	
-	
+
 	public PersonagemSingle(String nome, String cla, int nivelPoder) {
 		super(nome, cla, nivelPoder);
+		this.tipoJogo = "Singleplayer";
 		this.chefesDerrotados = 0;
 	}
-	
-	public void enfrentarChefe() {
-		if (chefesDerrotados < 5) {
-			chefesDerrotados ++;
-			System.out.println("Voce derrotou um chefão. Total de chefões derrotados: " + chefesDerrotados);
-			if (chefesDerrotados == 5) {
-				System.out.println("Parabens, voce derrotou todos os chefões e zerou o jogo");
-				
-			}
-		} else {
-			System.out.println("O jogo ja foi zerado");
+
+	@Override
+	public void create() {
+		super.create();
+		String sql = "INSERT INTO personagem_single (personagem_id, chefes_derrotados) " +
+				"SELECT id, ? FROM personagem WHERE nome = ?";
+		try (PreparedStatement pst = connection.prepareStatement(sql)) {
+			pst.setInt(1, chefesDerrotados);
+			pst.setString(2, nome);
+			pst.executeUpdate();
+			System.out.println("Configuração de personagem singleplayer salva com sucesso!");
+		} catch (SQLException ex) {
+			System.out.println("Erro ao configurar personagem singleplayer: " + ex.getMessage());
 		}
 	}
-	
-	public int getChefesDerrotados() {
-		return chefesDerrotados;
+
+	public void enfrentarChefe() {
+		int dano = 5; // Define o aumento de poder ao derrotar um inimigo
+		nivelPoder += dano; // Atualiza o nível de poder no objeto
+
+		System.out.printf("Você enfrentou um inimigo e ganhou +%d de poder! Nível atual: %d%n", dano, nivelPoder);
+
+		// Atualiza o número de monstros derrotados no banco de dados
+		String sql = "UPDATE personagem_single " +
+				"SET chefes_derrotados = chefes_derrotados + 1 " +
+				"WHERE personagem_id = (SELECT id FROM personagem WHERE nome = ?)";
+		try (PreparedStatement pst = connection.prepareStatement(sql)) {
+			pst.setString(1, nome); // Define o nome do personagem
+			int rowsAffected = pst.executeUpdate();
+
+			if (rowsAffected > 0) {
+				System.out.println("Número de monstros derrotados atualizado no banco com sucesso!");
+			} else {
+				System.out.println("Nenhum personagem encontrado para atualizar.");
+			}
+		} catch (SQLException ex) {
+			System.out.println("Erro ao atualizar monstros derrotados no banco: " + ex.getMessage());
+		}
 	}
 
-	public String[] listaPersonagem() {
-		return new String[] {"Personagem A", "Personagem B", "Personagem C"};
-	}
-	
-	public void criaPersonagem(String nome, String cla, int nivelPoder) {
-		
-		System.out.println("Personagem " + nome + " do clã " + cla + "Com nivel de poder:" + nivelPoder + "Criado com sucesso!");
-	}
-	
-	public void deletaPersonagem (String nome, String cla) {
-		
-		System.out.println("Personagem " + nome + " do clã " + cla + "Deletado com sucesso!");
-
-	}
-	
-	 public void enfrentaInimigo() {
-	        int dano = 5; 
-	        int novoNivelPoder = getNivelPoder() + dano;
-	        setNivelPoder(novoNivelPoder);
-	        System.out.println("Você enfrentou um inimigo e derrotou ele + " + dano + " de poder! Nível atual: " + novoNivelPoder);
-	 }
 }

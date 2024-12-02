@@ -16,7 +16,6 @@ public class Main {
 			System.out.println("---------MENU--------");
 			if (!jogoIniciado) {
 				System.out.println("1- Criar novo jogo");
-				System.out.println("2- Terminar Jogo");
 				System.out.println("3- Sair");
 			} else {
 				System.out.println("1- Criar personagem");
@@ -50,12 +49,6 @@ public class Main {
 						break;
 
 					case 2:
-						jogoIniciado = false;
-						tipoJogo = 0;
-						System.out.println("Jogo encerrado");
-						break;
-
-					case 3:
 						System.out.println("Saindo");
 						opcao = 0;
 						break;
