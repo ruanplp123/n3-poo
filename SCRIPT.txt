@@ -1,0 +1,24 @@
+-- Tabela principal para personagens
+CREATE TABLE personagem (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    cla VARCHAR(255) NOT NULL,
+    nivel_poder INT NOT NULL,
+    tipo_jogo VARCHAR(50) NOT NULL,
+    UNIQUE(nome) -- Garante que o nome seja único
+);
+
+-- Tabela para personagens multiplayer
+CREATE TABLE personagem_multi (
+    personagem_id INT PRIMARY KEY,
+    FOREIGN KEY (personagem_id) REFERENCES personagem(id)
+    ON DELETE CASCADE
+);
+
+-- Tabela para personagens singleplayer
+CREATE TABLE personagem_single (
+    personagem_id INT PRIMARY KEY,
+    chefes_derrotados INT DEFAULT 0,
+    FOREIGN KEY (personagem_id) REFERENCES personagem(id)
+    ON DELETE CASCADE
+);
